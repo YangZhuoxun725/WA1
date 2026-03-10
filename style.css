@@ -1,0 +1,110 @@
+html, body 
+{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+canvas
+{
+    display: block;
+}
+
+.centered-button
+{
+    font-family: "Times New Roman";
+    font-size: 48px;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background-color: #6495ED;
+    color: white;
+    cursor: pointer;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+}
+
+.centered-button:hover
+{
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+.checkbox-container
+{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    align-items: flex-start;
+}
+
+.toggle
+{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-family: "Times New Roman";
+    font-size: 24px;
+    color: white;
+}
+
+.toggle input
+{
+    display: none;
+}
+
+.slider
+{
+    width: 50px;
+    height: 26px;
+    background: #aaa;
+    border-radius: 20px;
+    position: relative;
+    transition: 0.3s;
+}
+
+.slider::before
+{
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 2px;
+    top: 2px;
+
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.toggle input:checked + .slider
+{
+    background: #6495ED;
+}
+
+.toggle input:checked + .slider::before
+{
+    transform: translateX(24px);
+}
+
+.checkbox-box 
+{
+    font-family: "Times New Roman";
+    font-size: 24px;
+    padding: 16px 16px;
+    border-radius: 16px;
+    border: none;
+    background-color: #6495ED;
+    color: white;
+    cursor: pointer;
+}
