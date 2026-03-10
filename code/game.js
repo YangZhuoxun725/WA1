@@ -9,7 +9,7 @@ class Game
 		this.powerupManager = new PowerupManager();
 
 		this.score = 0;
-		this.health = 1;
+		this.health = 50;
 		this.maxHealth = this.health;
 
 		this.gameOver = false;
