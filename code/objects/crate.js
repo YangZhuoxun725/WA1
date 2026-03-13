@@ -13,8 +13,7 @@ class Crate
 
     update()
     {
-        this.vel.add(this.gravity);
-        this.vel.mult(this.speedChange);
+        this.vel.add(this.gravity.copy().mult(this.speedChange));
         this.angle += this.vel.x * 0.1;
 
         this.pos.add(this.vel);

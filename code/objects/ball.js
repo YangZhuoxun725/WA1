@@ -72,30 +72,15 @@ class Ball
             }
             else if (powerup.type === "speed")
             {
-                game.powerupManager.activePowerup = "speed";
-                game.crateManager.setSpeedChange(0.5);
-                setTimeout(() => {
-                    game.powerupManager.activePowerup = null;
-                    game.crateManager.setSpeedChange(1);
-                }, 5000);
+                game.crateManager.startSpeedChange(5000, 0.5, this);
             }
             else if (powerup.type === "score")
             {
-                game.powerupManager.activePowerup = "score";
-                this.scoreIncrease += 1;
-                setTimeout(() => {
-                    game.powerupManager.activePowerup = null;
-                    this.scoreIncrease -= 1;
-                }, 5000);
+                game.crateManager.startScoreIncrease(5000, 1, this);
             }
             else if (powerup.type === "invincibility")
             {
-                game.powerupManager.activePowerup = "invincibility";
-                game.crateManager.setInvincibility(true);
-                setTimeout(() => {
-                    game.powerupManager.activePowerup = null;
-                    game.crateManager.setInvincibility(false);
-                }, 5000);
+                game.crateManager.startInvincibility(5000, this);
             }
         }
     }

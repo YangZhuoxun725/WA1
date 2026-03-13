@@ -23,22 +23,47 @@ class Powerup
 
     display()
     {
+        push();
+
+        translate(this.pos.x, this.pos.y);
         if (this.type === "health")
         {
-            image(healthPowerupImg, this.pos.x - healthPowerupImg.width / 2, this.pos.y - healthPowerupImg.height / 2);
+            let newSize = healthPowerupImg.width * map(Math.sin(millis() / 100), -1, 1, 0.9, 1.1);
+            image(
+                healthPowerupImg, 
+                -newSize / 2, -newSize / 2,
+                newSize, newSize
+            );
         }
         else if (this.type === "speed")
         {
-            image(speedPowerupImg, this.pos.x - speedPowerupImg.width / 2, this.pos.y - speedPowerupImg.height / 2);
+            let newSize = speedPowerupImg.width * map(Math.sin(millis() / 100), -1, 1, 0.9, 1.1);
+            image(
+                speedPowerupImg, 
+                -newSize / 2, -newSize / 2,
+                newSize, newSize
+            );
         }
         else if (this.type === "score")
         {
-            image(scorePowerupImg, this.pos.x - scorePowerupImg.width / 2, this.pos.y - scorePowerupImg.height / 2);
+            let newSize = scorePowerupImg.width * map(Math.sin(millis() / 100), -1, 1, 0.9, 1.1);
+            image(
+                scorePowerupImg, 
+                -newSize / 2, -newSize / 2,
+                newSize, newSize
+            );
         }
         else if (this.type === "invincibility")
         {
-            image(invincibilityPowerupImg, this.pos.x - invincibilityPowerupImg.width / 2, this.pos.y - invincibilityPowerupImg.height / 2);
+            let newSize = invincibilityPowerupImg.width * map(Math.sin(millis() / 100), -1, 1, 0.9, 1.1);
+            image(
+                invincibilityPowerupImg, 
+                -newSize / 2, -newSize / 2,
+                newSize, newSize
+            );
         }
+
+        pop();
     }
 
     killFloor()

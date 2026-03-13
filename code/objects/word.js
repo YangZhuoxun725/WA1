@@ -87,4 +87,10 @@ class Word
             
         if (this.accuracy > 0.5) game.cannon.fire(constrain(this.accuracy * this.wpm / 20, 6, 25));
     }
+
+    updateDifficulty(difficulty)
+    {
+        this.difficulty = difficulty;
+        this.reset();
+    }
 }

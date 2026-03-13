@@ -2,55 +2,111 @@ class Game
 {
 	constructor()
 	{
+		// Settings
 		this.settings = new Settings();
 
+		// Game State
 		this.cannon = new Cannon(groundImg.width, height - groundImg.height - cannonBaseImg.height);
 		this.balls = [];
 		this.word = new Word(this.settings.difficulty);
 		this.crateManager = new CrateManager();
 		this.powerupManager = new PowerupManager();
 
+		// Player State
 		this.score = 0;
 		this.highScore = this.score;
 		this.health = 50;
 		this.maxHealth = this.health;
 
+		// UI State
 		this.gameOver = false;
 		this.titleScreen = true;
 		this.pauseScreen = false;
 
+		// Input State
 		this.typing = false;
 
+		// Start Button
+
 		this.startButton = createButton("Start Game");
-		this.startButton.addClass("centered-button");
-		this.startButton.parent(select("main"))
+		this.startButton.parent(select("main"));
+		this.startButton.addClass("menu-button");
+
 		this.startButton.mousePressed(() => {
 			this.titleScreen = false;
 			this.gameOver = false;
+
 			this.startButton.hide();
+			this.difficultyContainer.hide();
 		});
 
+		// Restart Button
 		this.restartButton = createButton("Back to Title Screen");
-		this.restartButton.addClass("centered-button");
-		this.restartButton.parent(select("main"))
+		this.restartButton.parent(select("main"));
+		this.restartButton.addClass("menu-button");
+
 		this.restartButton.mousePressed(() => {
 			this.titleScreen = true;
 			this.gameOver = false;
+
 			this.restartButton.hide();
 			this.startButton.show();
+			this.difficultyContainer.show();
 
 			this.resetGame();
 		});
-		this.restartButton.hide();
 
-		this.container = createDiv();
-		this.container.addClass("checkbox-container");
-		this.container.position(width / 2, height / 2);
+		// Difficulty Buttons
+		this.difficultyButtons = [];
 
-		this.showScoreBox = createToggle("Show Score", this.settings.showScore, this.container);
-		this.showHealthBarBox = createToggle("Show Health Bar", this.settings.showHealthBar, this.container);
-		this.showPowerupEffectsBox = createToggle("Show Powerup Effects", this.settings.showPowerupEffects, this.container);
-		this.arrowKeysControlBox = createToggle("Arrow Keys Control", this.settings.arrowKeysControl, this.container);
+		this.difficultyContainer = createDiv();
+		this.difficultyContainer.id("difficulty-group");
+		this.difficultyContainer.parent(select("main"));
+
+		Object.keys(availableWords).forEach((name) => {
+			let button = createButton(name.toUpperCase());
+
+			button.parent(this.difficultyContainer);
+			button.addClass("difficulty-button");
+
+			button.mousePressed(() => {
+				this.difficultyButtons.forEach((btn) => btn.removeClass("active"));
+
+				button.addClass("active");
+
+				this.settings.difficulty = name;
+				this.word.updateDifficulty(name);
+			});
+
+			this.difficultyButtons.push(button);
+		});
+
+		this.difficultyButtons[0].addClass("active");
+		this.difficultyContainer.addClass("visible");
+		this.settings.difficulty = "Easy";
+		this.difficultyContainer.show();
+
+		// Settings Panel
+		this.uiContainer = createDiv();
+		this.uiContainer.addClass("settings-panel");
+		this.uiContainer.parent(select("main"));
+		this.uiContainer.position(width / 2, height / 2);
+
+		// Settings Checkboxes
+		this.showScoreBox = createCheckbox(" Show Score", this.settings.showScore);
+		this.showHealthBarBox = createCheckbox(" Show Health Bar", this.settings.showHealthBar);
+		this.showPowerupEffectsBox = createCheckbox(" Show Powerup Effects", this.settings.showPowerupEffects);
+		this.arrowKeysControlBox = createCheckbox(" Arrow Keys Control", this.settings.arrowKeysControl);
+
+		this.showScoreBox.addClass("settings-option");
+		this.showHealthBarBox.addClass("settings-option");
+		this.showPowerupEffectsBox.addClass("settings-option");
+		this.arrowKeysControlBox.addClass("settings-option");
+
+		this.showScoreBox.parent(this.uiContainer);
+		this.showHealthBarBox.parent(this.uiContainer);
+		this.showPowerupEffectsBox.parent(this.uiContainer);
+		this.arrowKeysControlBox.parent(this.uiContainer);
 
 		this.showScoreBox.changed(() => {
 			this.settings.showScore = this.showScoreBox.checked();
@@ -65,7 +121,9 @@ class Game
 			this.settings.arrowKeysControl = this.arrowKeysControlBox.checked();
 		});
 
-		this.container.hide();
+		// Initial Visibility
+		this.restartButton.hide();
+		this.uiContainer.hide();
 	}
 	
 	update()
@@ -86,7 +144,7 @@ class Game
 				this.typing = true;
 				this.pauseScreen = !this.pauseScreen;
 
-				this.container.hide();
+				this.uiContainer.hide();
 			}
 			else if (!keyIsPressed)
 			{
@@ -102,7 +160,7 @@ class Game
 				this.typing = true;
 				this.pauseScreen = !this.pauseScreen;
 
-				this.container.show();
+				this.uiContainer.show();
 			}
 			else if (!keyIsPressed)
 			{
