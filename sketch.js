@@ -3,7 +3,8 @@ let game;
 function setup() 
 {
     createCanvas(windowWidth, windowHeight);
-  
+    userStartAudio();
+    
     game = new Game();
 }
 

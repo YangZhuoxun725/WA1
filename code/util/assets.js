@@ -1,7 +1,9 @@
-let backgroundImg, ballImg, cannonHeadImg, cannonBaseImg, crateImg, groundImg;
+let backgroundImg, ballImg, cannonHeadImg, cannonBaseImg, crateImg, groundImg, healthPowerupImg, speedPowerupImg, scorePowerupImg, invincibilityPowerupImg
+let musicSound, cannonFireSound, crateFloorBreakSound, crateBallBreakSound, powerupHitSound;
 
 function preload()
 {
+    // Images
     backgroundImg = loadImage("assets/textures/background.png");
     ballImg = loadImage("assets/textures/ball.png");
     cannonHeadImg = loadImage("assets/textures/cannon.png");
@@ -12,4 +14,11 @@ function preload()
     speedPowerupImg = loadImage("assets/textures/speed_powerup.png");
     scorePowerupImg = loadImage("assets/textures/score_powerup.png");
     invincibilityPowerupImg = loadImage("assets/textures/invincibility_powerup.png");
+
+    // Sounds
+    musicSound = loadSound("assets/sounds/music.mp3");
+    cannonFireSound = loadSound("assets/sounds/cannon_fire.mp3");
+    crateFloorBreakSound = loadSound("assets/sounds/crate_floor_break.mp3");
+    crateBallBreakSound = loadSound("assets/sounds/crate_ball_break.mp3");
+    powerupHitSound = loadSound("assets/sounds/powerup_hit.mp3");
 }

@@ -79,7 +79,7 @@ class Word
         this.accuracy = this.typed.length / (this.typed.length + this.wrong);
         this.wpm = (this.displayText.length) / (this.timer / 60000);
 
-        this.text = generateWord(this.difficulty);
+        this.text = generateWord(this.difficulty, game.score);
         this.displayText = this.text;
         this.typed = "";
         this.wrong = 0

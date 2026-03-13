@@ -3,9 +3,7 @@ class Powerup
     constructor(x, y)
     {
         this.pos = createVector(x, y);
-        this.vel = createVector(0, 0);
-        this.gravity = createVector(0, 0.01);
-        this.friction = 0.99;
+        this.gravity = createVector(0, random(1, 2));
 
         let types = ["health", "speed", "score", "invincibility"];
         this.type = random(types);
@@ -13,10 +11,7 @@ class Powerup
 
     update()
     {
-        this.vel.add(this.gravity);
-        this.vel.mult(this.friction);
-
-        this.pos.add(this.vel);
+        this.pos.add(this.gravity);
 
         this.killFloor();
     }

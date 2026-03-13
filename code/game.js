@@ -6,11 +6,13 @@ class Game
 		this.settings = new Settings();
 
 		// Game State
+		this.firstPlay = true;
 		this.cannon = new Cannon(groundImg.width, height - groundImg.height - cannonBaseImg.height);
 		this.balls = [];
 		this.word = new Word(this.settings.difficulty);
 		this.crateManager = new CrateManager();
 		this.powerupManager = new PowerupManager();
+		this.particleManager = new ParticleManager();
 
 		// Player State
 		this.score = 0;
@@ -22,17 +24,23 @@ class Game
 		this.gameOver = false;
 		this.titleScreen = true;
 		this.pauseScreen = false;
+		this.instructionsScreen = false;
 
 		// Input State
-		this.typing = false;
+		this.typing = true;
 
 		// Start Button
-
 		this.startButton = createButton("Start Game");
 		this.startButton.parent(select("main"));
 		this.startButton.addClass("menu-button");
 
 		this.startButton.mousePressed(() => {
+			if (this.firstPlay)
+			{
+				this.instructionsScreen = true;
+				this.firstPlay = false;
+			}
+
 			this.titleScreen = false;
 			this.gameOver = false;
 
@@ -124,6 +132,10 @@ class Game
 		// Initial Visibility
 		this.restartButton.hide();
 		this.uiContainer.hide();
+
+		// Music
+		musicSound.setVolume(0.3);
+		musicSound.loop();
 	}
 	
 	update()
@@ -142,11 +154,25 @@ class Game
 			if (keyIsPressed && (key === "Escape" || key === "Esc") && !this.typing)
 			{
 				this.typing = true;
-				this.pauseScreen = !this.pauseScreen;
+				this.pauseScreen = false;
 
 				this.uiContainer.hide();
+
+				musicSound.play();
 			}
 			else if (!keyIsPressed)
+			{
+				this.typing = false;
+			}
+		}
+		else if (this.instructionsScreen)
+		{
+			if ((keyIsPressed || mouseIsPressed) && !this.typing)
+			{
+				this.typing = true;
+				this.instructionsScreen = false;
+			}
+			else if (!keyIsPressed && !mouseIsPressed)
 			{
 				this.typing = false;
 			}
@@ -158,9 +184,11 @@ class Game
 			if (keyIsPressed && (key === "Escape" || key === "Esc") && !this.typing)
 			{
 				this.typing = true;
-				this.pauseScreen = !this.pauseScreen;
+				this.pauseScreen = true;
 
 				this.uiContainer.show();
+
+				musicSound.pause();
 			}
 			else if (!keyIsPressed)
 			{
@@ -185,6 +213,10 @@ class Game
 		{
 			this.displayGame();
 			this.displayPauseScreen();
+		}
+		else if (this.instructionsScreen)
+		{
+			this.displayInstructionsScreen();
 		}
 		else
 		{
@@ -216,6 +248,8 @@ class Game
 		}		
 
 		this.powerupManager.update();
+
+		this.particleManager.update();
 
 		this.cannon.update();
 
@@ -275,6 +309,37 @@ class Game
 		pop();
 	}
 
+	displayInstructionsScreen()
+	{
+		push();
+
+		textAlign(CENTER, CENTER);
+		textFont("Times New Roman");
+		textSize(32);
+		fill(0);
+		text(
+			`
+			Use the mouse or arrow keys to aim and click to shoot
+			Spell the word and press SPACE/ENTER or click to fire the cannon
+			The faster and the more accurately you shoot, the more powerful your shots will be
+			Don't let the crates reach the ground
+			Collect powerups for special effects
+			Heart powerups give you extra health
+			Blue powerups make crates fall slower for 5 seconds
+			Lightning powerups make crates give more points for 5 seconds
+			Shield powerups make you invincible for 5 seconds
+			Press ESC to pause the game
+			`, 
+			width / 2, height / 3
+		);
+		if (millis() % 1000 < 500)
+		{
+			text("PRESS ANY KEY TO BEGIN", width / 2, height * 2 / 3);
+		}
+
+		pop();
+	}
+
 	displayGame()
 	{
 		this.word.display();
@@ -287,6 +352,8 @@ class Game
 		this.crateManager.display();
 
 		this.powerupManager.display();
+
+		this.particleManager.display();
 
 		this.cannon.display();
 
@@ -314,7 +381,6 @@ class Game
 		this.powerupManager = new PowerupManager();
 
 		this.score = 0;
-		this.highScore = this.score;
 		this.health = this.maxHealth;
 	}
 }

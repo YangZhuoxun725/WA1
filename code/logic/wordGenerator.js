@@ -6,7 +6,33 @@ let availableWords =
     "impossible": ["antidisestablishmentarianism","floccinaucinihilipilification","pneumonoultramicroscopicsilicovolcanoconiosis","supercalifragilisticexpialidocious","hippopotomonstrosesquipedaliophobia","thyroparathyroidectomized","dichlorodifluoromethane","incomprehensibilities","disproportionableness","counterrevolutionaries","institutionalization","internationalization","characterization","electroencephalography","spectrophotometrically","immunohistochemistry","hypercholesterolemia","psychopharmacological","neurophysiological","electrophysiological","magnetohydrodynamics","incompressibilities","mischaracterization","overintellectualization","compartmentalization","deinstitutionalization","disproportionateness","ultramicroscopically","crystallographically","anthropomorphization","commercialization","demilitarization","hyperventilation","photosensitization","electrocardiographically","endocrinologically","interdisciplinarity","microarchitecture","pharmacokinetics","psychoneuroimmunology","thermodynamically","incomprehensibility","counterproductiveness","electrochemically","hyperresponsiveness","incomprehensibleness","disproportionability"],
 }
 
-function generateWord(mode)
+function generateWord(mode, score)
 {
-    return random(availableWords[mode]);
+    if (score == 0)
+    {
+        return random(availableWords[mode]);
+    }
+    else
+    {
+        let randomValue = random(0, score / 10);
+        if (randomValue < 1 || mode === "impossible")
+        {
+            return random(availableWords[mode]);
+        }
+        else
+        {
+            let nextMode;
+            nextMode = mode === "easy" ? "normal" : mode === "normal" ? "hard" : "impossible";
+
+            if (randomValue > 3 && nextMode !== "impossible")
+            {
+                let next2Mode;
+                next2Mode = nextMode === "easy" ? "normal" : nextMode === "normal" ? "hard" : "impossible";
+                
+                return random(availableWords[next2Mode]);
+            }
+
+            return random(availableWords[nextMode]);
+        }
+    }
 }

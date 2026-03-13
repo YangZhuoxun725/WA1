@@ -51,6 +51,9 @@ class Crate
             {
                 game.health -= 1;
             }
+
+            crateFloorBreakSound.rate(2.5);
+            crateFloorBreakSound.play();
         }
     }
     
@@ -60,6 +63,16 @@ class Crate
         if (index !== -1)
         {
             game.crateManager.crates.splice(index, 1);
+            this.particleEffect();
+        }
+    }
+
+    particleEffect()
+    {
+        for (let i = 0; i < 10; i++)
+        {
+            let particle = new Particle(this.pos.x, this.pos.y, random(10, 16), [200, 100, 50]);
+            game.particleManager.particles.push(particle);
         }
     }
 }

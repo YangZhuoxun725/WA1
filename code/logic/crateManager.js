@@ -48,7 +48,7 @@ class CrateManager
     {
         if (millis() - this.lastSpawnTime > this.spawnCooldown)
         {
-            let x = random(groundImg.width * 2, width - crateImg.width);
+            let x = random(groundImg.width * 4, width - crateImg.width);
             let y = -crateImg.height;
             this.crates.push(new Crate(x, y));
             this.lastSpawnTime = millis();

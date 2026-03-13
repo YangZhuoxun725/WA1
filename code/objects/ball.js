@@ -25,6 +25,10 @@ class Ball
         {
             this.vel.y = 0;
         }
+        if (this.vel == createVector(0, 0))
+        {
+            this.kill();
+        }
 
         this.pos.add(this.vel);
 
@@ -52,10 +56,22 @@ class Ball
     killCrate(crate)
     {
         let distance = p5.Vector.sub(this.pos, crate.pos);
-        if (distance.mag() < ballImg.width / 2 + crateImg.width / 2)
+        if (distance.mag() < ballImg.width / 2 + crateImg.width / 2 && crate.pos.y > 0)
         {
-            crate.kill();
-            game.score += this.scoreIncrease;
+            if (Math.abs(this.vel.y) > 0)
+            {
+                crate.kill();
+                game.score += this.scoreIncrease;
+
+                crateBallBreakSound.rate(2.0);
+                crateBallBreakSound.play();
+            }
+            else
+            {
+                this.kill();
+                
+                this.particleEffect();
+            }
         }
     }
 
@@ -82,17 +98,16 @@ class Ball
             {
                 game.crateManager.startInvincibility(5000, this);
             }
+
+            powerupHitSound.rate(2.0);
+            powerupHitSound.play();
         }
     }
 
     killAfterTime()
     {
         setTimeout(() => {
-            let index = game.balls.indexOf(this);
-            if (index !== -1)
-            {
-                game.balls.splice(index, 1);
-            }
+            this.kill();
         }, 5000);
     }
 
@@ -103,11 +118,25 @@ class Ball
             this.pos.y < -ballImg.height ||
             this.pos.y > height + ballImg.height)
         {
-            let index = game.balls.indexOf(this);
-            if (index !== -1)
-            {
-                game.balls.splice(index, 1);
-            }
+            this.kill();
+        }
+    }
+
+    kill()
+    {
+        let index = game.balls.indexOf(this);
+        if (index !== -1)
+        {
+            game.balls.splice(index, 1);
+        }
+    }
+
+    particleEffect()
+    {
+        for (let i = 0; i < 10; i++)
+        {
+            let particle = new Particle(this.pos.x, this.pos.y, random(10, 16), [50, 50, 50]);
+            game.particleManager.particles.push(particle);
         }
     }
 }
