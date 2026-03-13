@@ -3,7 +3,7 @@ class PowerupManager
     constructor()
     {
         this.powerups = [];
-        this.spawnCooldown = 10000;
+        this.spawnCooldown = 15000;
         this.lastSpawnTime = 0;
         this.activePowerup = null;
     }    

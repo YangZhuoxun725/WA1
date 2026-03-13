@@ -134,7 +134,7 @@ class Game
 		this.uiContainer.hide();
 
 		// Music
-		musicSound.setVolume(0.3);
+		musicSound.setVolume(0.2);
 		musicSound.loop();
 	}
 	
@@ -379,6 +379,7 @@ class Game
 		this.word = new Word(this.settings.difficulty);
 		this.crateManager = new CrateManager();
 		this.powerupManager = new PowerupManager();
+		this.particleManager = new ParticleManager();
 
 		this.score = 0;
 		this.health = this.maxHealth;
