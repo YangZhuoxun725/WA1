@@ -17,7 +17,7 @@ class Game
 		// Player State
 		this.score = 0;
 		this.highScore = this.score;
-		this.health = 50;
+		this.health = 2;
 		this.maxHealth = this.health;
 
 		// UI State
@@ -91,7 +91,7 @@ class Game
 
 		this.difficultyButtons[0].addClass("active");
 		this.difficultyContainer.addClass("visible");
-		this.settings.difficulty = "Easy";
+		this.settings.difficulty = "easy";
 		this.difficultyContainer.show();
 
 		// Settings Panel
@@ -127,6 +127,22 @@ class Game
 		});
 		this.arrowKeysControlBox.changed(() => {
 			this.settings.arrowKeysControl = this.arrowKeysControlBox.checked();
+		});
+
+		// Settings Exit Button
+		this.exitGameButton = createButton("Exit Game");
+		this.exitGameButton.addClass("exit-button");
+		this.exitGameButton.parent(this.uiContainer);
+
+		this.exitGameButton.mousePressed(() => {
+			this.titleScreen = false;
+			this.instructionsScreen = false;
+			this.pauseScreen = false;
+			this.health = 0;
+
+			this.uiContainer.hide();
+
+			musicSound.play();
 		});
 
 		// Initial Visibility
