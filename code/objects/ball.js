@@ -58,7 +58,7 @@ class Ball
         let distance = p5.Vector.sub(this.pos, crate.pos);
         if (distance.mag() < ballImg.width / 2 + crateImg.width / 2 && crate.pos.y > 0)
         {
-            if (Math.abs(this.vel.y) > 0)
+            if (this.vel.mag() > 0.5)
             {
                 crate.kill();
                 game.score += this.scoreIncrease;

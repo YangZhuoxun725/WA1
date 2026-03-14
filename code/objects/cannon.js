@@ -64,5 +64,7 @@ class Cannon
 
         cannonFireSound.rate(2.0);
         cannonFireSound.play();
+
+        game.screenShake(6);
     }
 }

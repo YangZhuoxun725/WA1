@@ -152,6 +152,10 @@ class Game
 		// Music
 		musicSound.setVolume(0.2);
 		musicSound.loop();
+
+		// Screen Shake
+		this.screenShakeIntensity = 0;
+		this.screenShakeDecay = 0.95;
 	}
 	
 	update()
@@ -215,6 +219,12 @@ class Game
 	
 	display()
 	{
+		push();
+
+		let shakeX = map(noise(millis() * 0.05), 0, 1, -this.screenShakeIntensity, this.screenShakeIntensity);
+		let shakeY = map(noise(millis() * 0.05), 0, 1, -this.screenShakeIntensity, this.screenShakeIntensity);
+		translate(shakeX, shakeY);
+
 		this.displayBackground();
 
 		if (this.titleScreen)
@@ -237,6 +247,15 @@ class Game
 		else
 		{
 		 	this.displayGame();
+		}
+
+		pop();
+
+		this.screenShakeIntensity *= this.screenShakeDecay;
+
+		if (this.screenShakeIntensity < 0.01)
+		{
+			this.screenShakeIntensity = 0;
 		}
 	}
 
@@ -399,6 +418,11 @@ class Game
 
 		this.score = 0;
 		this.health = this.maxHealth;
+	}
+
+	screenShake(intensity)
+	{
+		this.screenShakeIntensity = intensity;
 	}
 }
 
