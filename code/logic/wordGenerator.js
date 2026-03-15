@@ -8,7 +8,7 @@ let availableWords =
 
 function generateWord(mode, score)
 {
-    if (score == 0)
+    if (score == 0 || !score)
     {
         return random(availableWords[mode]);
     }

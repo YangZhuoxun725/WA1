@@ -62,6 +62,7 @@ class Cannon
 
         this.recoil = this.recoilMax;
 
+        cannonFireSound.setVolume(game.settings.sfxVolume);
         cannonFireSound.rate(2.0);
         cannonFireSound.play();
 

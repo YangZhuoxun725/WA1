@@ -1,4 +1,5 @@
 let backgroundImg, ballImg, cannonHeadImg, cannonBaseImg, crateImg, groundImg, healthPowerupImg, speedPowerupImg, scorePowerupImg, invincibilityPowerupImg
+let questionButtonImg;
 let musicSound, cannonFireSound, crateFloorBreakSound, crateBallBreakSound, powerupHitSound;
 
 function preload()
@@ -14,6 +15,8 @@ function preload()
     speedPowerupImg = loadImage("assets/textures/speed_powerup.png");
     scorePowerupImg = loadImage("assets/textures/score_powerup.png");
     invincibilityPowerupImg = loadImage("assets/textures/invincibility_powerup.png");
+
+    questionButtonImg = loadImage("assets/textures/question_button.png");
 
     // Sounds
     musicSound = loadSound("assets/sounds/music.mp3");

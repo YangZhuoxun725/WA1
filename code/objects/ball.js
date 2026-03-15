@@ -63,6 +63,7 @@ class Ball
                 crate.kill();
                 game.score += this.scoreIncrease;
 
+                crateBallBreakSound.setVolume(game.settings.sfxVolume);
                 crateBallBreakSound.rate(2.0);
                 crateBallBreakSound.play();
             }
@@ -84,7 +85,7 @@ class Ball
 
             if (powerup.type === "health")
             {
-                game.health += 10;
+                game.health += 5;
             }
             else if (powerup.type === "speed")
             {
@@ -99,6 +100,7 @@ class Ball
                 game.crateManager.startInvincibility(5000, this);
             }
 
+            powerupHitSound.setVolume(game.settings.sfxVolume);
             powerupHitSound.rate(2.0);
             powerupHitSound.play();
         }

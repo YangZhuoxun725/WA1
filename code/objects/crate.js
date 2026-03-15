@@ -52,6 +52,7 @@ class Crate
                 game.health -= 1;
             }
 
+            crateFloorBreakSound.setVolume(game.settings.sfxVolume);
             crateFloorBreakSound.rate(2.5);
             crateFloorBreakSound.play();
         }

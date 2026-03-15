@@ -17,7 +17,7 @@ class Game
 		// Player State
 		this.score = 0;
 		this.highScore = this.score;
-		this.health = 2;
+		this.health = 25;
 		this.maxHealth = this.health;
 
 		// UI State
@@ -28,6 +28,14 @@ class Game
 
 		// Input State
 		this.typing = true;
+
+		// Custom Buttons
+		this.instructionsButton = new CustomButton(width - questionButtonImg.width / 2 - 16, questionButtonImg.height / 2 + 16, 64, 64, questionButtonImg, () => {
+			if (this.titleScreen)
+			{
+				this.instructionsScreen = true;
+			}
+		});
 
 		// Start Button
 		this.startButton = createButton("Start Game");
@@ -43,9 +51,6 @@ class Game
 
 			this.titleScreen = false;
 			this.gameOver = false;
-
-			this.startButton.hide();
-			this.difficultyContainer.hide();
 		});
 
 		// Restart Button
@@ -56,10 +61,6 @@ class Game
 		this.restartButton.mousePressed(() => {
 			this.titleScreen = true;
 			this.gameOver = false;
-
-			this.restartButton.hide();
-			this.startButton.show();
-			this.difficultyContainer.show();
 
 			this.resetGame();
 		});
@@ -98,7 +99,7 @@ class Game
 		this.uiContainer = createDiv();
 		this.uiContainer.addClass("settings-panel");
 		this.uiContainer.parent(select("main"));
-		this.uiContainer.position(width / 2, height / 2);
+		this.uiContainer.position(width / 2, height / 3);
 
 		// Settings Checkboxes
 		this.showScoreBox = createCheckbox(" Show Score", this.settings.showScore);
@@ -129,6 +130,58 @@ class Game
 			this.settings.arrowKeysControl = this.arrowKeysControlBox.checked();
 		});
 
+		// Settings Volume Sliders
+		this.musicVolumeOption = createDiv();
+		this.musicVolumeOption.addClass("settings-option");
+		this.musicVolumeOption.addClass("settings-volume-option");
+		this.musicVolumeOption.parent(this.uiContainer);
+
+		this.musicHeader = createDiv();
+		this.musicHeader.addClass("settings-volume-header");
+		this.musicHeader.parent(this.musicVolumeOption);
+
+		this.musicLabel = createSpan("Music Volume");
+		this.musicLabel.parent(this.musicHeader);
+
+		this.musicPercent = createSpan(Math.round(this.settings.musicVolume * 100) + "%");
+		this.musicPercent.addClass("settings-volume-percent");
+		this.musicPercent.parent(this.musicHeader);
+
+		this.musicVolumeSlider = createSlider(0, 2, this.settings.musicVolume, 0.01);
+		this.musicVolumeSlider.addClass("settings-volume-slider");
+		this.musicVolumeSlider.parent(this.musicVolumeOption);
+
+		this.sfxVolumeOption = createDiv();
+		this.sfxVolumeOption.addClass("settings-option");
+		this.sfxVolumeOption.addClass("settings-volume-option");
+		this.sfxVolumeOption.parent(this.uiContainer);
+
+		this.sfxHeader = createDiv();
+		this.sfxHeader.addClass("settings-volume-header");
+		this.sfxHeader.parent(this.sfxVolumeOption);
+
+		this.sfxLabel = createSpan("SFX Volume");
+		this.sfxLabel.parent(this.sfxHeader);
+
+		this.sfxPercent = createSpan(Math.round(this.settings.sfxVolume * 100) + "%");
+		this.sfxPercent.addClass("settings-volume-percent");
+		this.sfxPercent.parent(this.sfxHeader);
+
+		this.sfxVolumeSlider = createSlider(0, 2, this.settings.sfxVolume, 0.01);
+		this.sfxVolumeSlider.addClass("settings-volume-slider");
+		this.sfxVolumeSlider.parent(this.sfxVolumeOption);
+
+		this.musicVolumeSlider.input(() => {
+			this.settings.musicVolume = this.musicVolumeSlider.value();
+			this.musicPercent.html(Math.round(this.settings.musicVolume * 100) + "%");
+			musicSound.setVolume(0.2 * this.settings.musicVolume);
+		});
+
+		this.sfxVolumeSlider.input(() => {
+			this.settings.sfxVolume = this.sfxVolumeSlider.value();
+			this.sfxPercent.html(Math.round(this.settings.sfxVolume * 100) + "%");
+		});
+
 		// Settings Exit Button
 		this.exitGameButton = createButton("Exit Game");
 		this.exitGameButton.addClass("exit-button");
@@ -140,8 +193,6 @@ class Game
 			this.pauseScreen = false;
 			this.health = 0;
 
-			this.uiContainer.hide();
-
 			musicSound.play();
 		});
 
@@ -150,7 +201,7 @@ class Game
 		this.uiContainer.hide();
 
 		// Music
-		musicSound.setVolume(0.2);
+		musicSound.setVolume(0.2 * this.settings.musicVolume);
 		musicSound.loop();
 
 		// Screen Shake
@@ -160,30 +211,13 @@ class Game
 	
 	update()
 	{
-		if (this.titleScreen)
+		if (this.titleScreen && !this.instructionsScreen)
 		{
-
-		}
-		else if (this.gameOver)
-		{
-			this.restartButton.show();
-			this.startButton.hide();
-		}
-		else if (this.pauseScreen)
-		{
-			if (keyIsPressed && (key === "Escape" || key === "Esc") && !this.typing)
-			{
-				this.typing = true;
-				this.pauseScreen = false;
-
-				this.uiContainer.hide();
-
-				musicSound.play();
-			}
-			else if (!keyIsPressed)
-			{
-				this.typing = false;
-			}
+			this.instructionsButton.update();
+			this.difficultyContainer.show();
+			this.startButton.show();
+			this.restartButton.hide();
+			this.uiContainer.hide();
 		}
 		else if (this.instructionsScreen)
 		{
@@ -196,12 +230,50 @@ class Game
 			{
 				this.typing = false;
 			}
+			this.instructionsButton.hide();
+			this.difficultyContainer.hide();
+			this.startButton.hide();
+			this.restartButton.hide();
+			this.uiContainer.hide();
+		}
+		else if (this.gameOver)
+		{
+			this.restartButton.show();
+			this.startButton.hide();
+
+			this.instructionsButton.hide();
+			this.difficultyContainer.hide();
+			this.startButton.hide();
+			this.restartButton.show();
+			this.uiContainer.hide();
+		}
+		else if (this.pauseScreen)
+		{
+			if (keyIsPressed && keyCode === ESCAPE && !this.typing)
+			{
+				this.typing = true;
+				this.pauseScreen = false;
+
+				this.uiContainer.hide();
+
+				musicSound.play();
+			}
+			else if (!keyIsPressed)
+			{
+				this.typing = false;
+			}
+
+			this.instructionsButton.hide();
+			this.difficultyContainer.hide();
+			this.startButton.hide();
+			this.restartButton.hide();
+			this.uiContainer.show();
 		}
 		else
 		{
 			this.updateGame();
 
-			if (keyIsPressed && (key === "Escape" || key === "Esc") && !this.typing)
+			if (keyIsPressed && keyCode === ESCAPE && !this.typing)
 			{
 				this.typing = true;
 				this.pauseScreen = true;
@@ -214,6 +286,12 @@ class Game
 			{
 				this.typing = false;
 			}
+
+			this.instructionsButton.hide();
+			this.difficultyContainer.hide();
+			this.startButton.hide();
+			this.restartButton.hide();
+			this.uiContainer.hide();
 		}
 	}
 	
@@ -227,9 +305,10 @@ class Game
 
 		this.displayBackground();
 
-		if (this.titleScreen)
+		if (this.titleScreen && !this.instructionsScreen)
 		{
 			this.displayTitleScreen();
+			this.instructionsButton.display();
 		}
 		else if (this.gameOver)
 		{
@@ -275,12 +354,8 @@ class Game
 		for (let ball of this.balls)
 		{
 			this.crateManager.killCrates(ball);
-		}
-
-		for (let ball of this.balls)
-		{
 			this.powerupManager.killPowerups(ball);
-		}		
+		}	
 
 		this.powerupManager.update();
 
@@ -339,7 +414,7 @@ class Game
 		textFont("Times New Roman");
 		textSize(64);
 		fill(0);
-		text("Paused", width / 2, height / 3);
+		text("Paused", width / 2, height / 4);
 
 		pop();
 	}
@@ -367,9 +442,9 @@ class Game
 			`, 
 			width / 2, height / 3
 		);
-		if (millis() % 1000 < 500)
+		if (floor(millis() / 500) % 2 === 0)
 		{
-			text("PRESS ANY KEY TO BEGIN", width / 2, height * 2 / 3);
+			text("PRESS ANY KEY TO CONTINUE", width / 2, height * 2 / 3);
 		}
 
 		pop();
