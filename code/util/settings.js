@@ -2,6 +2,7 @@ class Settings
 {
     constructor()
     {
+        // Default settings
         this.difficulty = "easy";
         this.showHealthBar = true;
         this.showScore = true;

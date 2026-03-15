@@ -213,7 +213,10 @@ class Game
 	{
 		if (this.titleScreen && !this.instructionsScreen)
 		{
+			// Update title screen
 			this.instructionsButton.update();
+
+			// Show title screen UI
 			this.difficultyContainer.show();
 			this.startButton.show();
 			this.restartButton.hide();
@@ -221,6 +224,7 @@ class Game
 		}
 		else if (this.instructionsScreen)
 		{
+			// Update instructions screen
 			if ((keyIsPressed || mouseIsPressed) && !this.typing)
 			{
 				this.typing = true;
@@ -230,6 +234,8 @@ class Game
 			{
 				this.typing = false;
 			}
+
+			// Show instructions screen UI
 			this.instructionsButton.hide();
 			this.difficultyContainer.hide();
 			this.startButton.hide();
@@ -238,9 +244,7 @@ class Game
 		}
 		else if (this.gameOver)
 		{
-			this.restartButton.show();
-			this.startButton.hide();
-
+			// Show game over screen UI
 			this.instructionsButton.hide();
 			this.difficultyContainer.hide();
 			this.startButton.hide();
@@ -249,6 +253,7 @@ class Game
 		}
 		else if (this.pauseScreen)
 		{
+			// Update pause screen
 			if (keyIsPressed && keyCode === ESCAPE && !this.typing)
 			{
 				this.typing = true;
@@ -263,6 +268,7 @@ class Game
 				this.typing = false;
 			}
 
+			// Show pause screen UI
 			this.instructionsButton.hide();
 			this.difficultyContainer.hide();
 			this.startButton.hide();
@@ -271,6 +277,7 @@ class Game
 		}
 		else
 		{
+			// Update game
 			this.updateGame();
 
 			if (keyIsPressed && keyCode === ESCAPE && !this.typing)
@@ -287,6 +294,7 @@ class Game
 				this.typing = false;
 			}
 
+			// Show game UI
 			this.instructionsButton.hide();
 			this.difficultyContainer.hide();
 			this.startButton.hide();
@@ -299,6 +307,7 @@ class Game
 	{
 		push();
 
+		// Screen Shake
 		let shakeX = map(noise(millis() * 0.05), 0, 1, -this.screenShakeIntensity, this.screenShakeIntensity);
 		let shakeY = map(noise(millis() * 0.05), 0, 1, -this.screenShakeIntensity, this.screenShakeIntensity);
 		translate(shakeX, shakeY);
@@ -307,29 +316,35 @@ class Game
 
 		if (this.titleScreen && !this.instructionsScreen)
 		{
+			// Display title screen
 			this.displayTitleScreen();
 			this.instructionsButton.display();
 		}
 		else if (this.gameOver)
 		{
+			// Display game over screen
 			this.displayGameOverScreen();
 		}
 		else if (this.pauseScreen)
 		{
+			// Display pause screen (and game in the background)
 			this.displayGame();
 			this.displayPauseScreen();
 		}
 		else if (this.instructionsScreen)
 		{
+			// Display instructions screen
 			this.displayInstructionsScreen();
 		}
 		else
 		{
+			// Display game
 		 	this.displayGame();
 		}
 
 		pop();
 
+		// Screen Shake Decay
 		this.screenShakeIntensity *= this.screenShakeDecay;
 
 		if (this.screenShakeIntensity < 0.01)
@@ -340,29 +355,37 @@ class Game
 
 	updateGame()
 	{
+		// Update Word
 		this.word.update();
 
+		// Update each ball twice so it moves faster without increasing power or frame rate
 		for (let ball of this.balls)
 		{
 			ball.update();
 			ball.update();
 		}
 
+		// Update crates and powerups for the same reason as balls
 		this.crateManager.update();
 		this.crateManager.update();
+
+		this.powerupManager.update();
+		this.powerupManager.update();
 		
+		// Check collisions between balls and crates/powerups
 		for (let ball of this.balls)
 		{
 			this.crateManager.killCrates(ball);
 			this.powerupManager.killPowerups(ball);
-		}	
+		}
 
-		this.powerupManager.update();
-
+		// Update particles
 		this.particleManager.update();
 
+		// Update cannon
 		this.cannon.update();
 
+		// Check game over
 		if (this.health <= 0)
 		{
 			this.gameOver = true;
@@ -377,6 +400,7 @@ class Game
 	{
 		push();
 
+		// Title Text
 		textAlign(CENTER, CENTER);
 		textFont("Times New Roman");
 		textSize(96);
@@ -390,12 +414,14 @@ class Game
 	{
 		push();
 
+		// Game Over Text
 		textAlign(CENTER, CENTER);
 		textFont("Times New Roman");
 		textSize(64);
 		fill(0);
 		text("Game Over", width / 2, height / 4);
 
+		// Score/High Score Text
 		textSize(24);
 		text(`Score: ${this.score}`, width / 2, height / 3);
 		text(`High Score: ${this.highScore}`, width / 2, height / 3 + 40);
@@ -407,12 +433,15 @@ class Game
 	{
 		push();
 
+		// Pause Overlay
 		noStroke();
 		fill(255, 255, 255, 200);
 		rect(0, 0, width, height);
 		textAlign(CENTER, CENTER);
 		textFont("Times New Roman");
 		textSize(64);
+
+		// Pause Text
 		fill(0);
 		text("Paused", width / 2, height / 4);
 
@@ -423,6 +452,7 @@ class Game
 	{
 		push();
 
+		// Instructions
 		textAlign(CENTER, CENTER);
 		textFont("Times New Roman");
 		textSize(32);
@@ -442,6 +472,8 @@ class Game
 			`, 
 			width / 2, height / 3
 		);
+
+		// Blinking Text
 		if (floor(millis() / 500) % 2 === 0)
 		{
 			text("PRESS ANY KEY TO CONTINUE", width / 2, height * 2 / 3);
@@ -452,21 +484,28 @@ class Game
 
 	displayGame()
 	{
-		this.word.display();
-
+		// Display balls
 		for (let ball of this.balls)
 		{
 			ball.display();
 		}
 
+		// Display crates
 		this.crateManager.display();
 
+		// Display powerups
 		this.powerupManager.display();
 
+		// Display particles
 		this.particleManager.display();
 
+		// Display cannon
 		this.cannon.display();
 
+		// Display word
+		this.word.display();
+
+		// Display UI over everything else
 		if (this.settings.showScore) { UI.displayScore(this); }
 		if (this.settings.showHealthBar) { UI.displayHealthBar(this); }
 		if (this.settings.showPowerupEffects) { UI.displayPowerup(this); }
@@ -474,8 +513,10 @@ class Game
 
 	displayBackground()
 	{
+		// Display sky
 		image(backgroundImg, 0, 0, width, height);
 		
+		// Display ground
 		for (let i = 0; i < width; i += groundImg.width)
 		{
 			image(groundImg, i, height - groundImg.height);
@@ -484,6 +525,7 @@ class Game
 
 	resetGame()
 	{
+		// Reset game state
 		this.cannon = new Cannon(groundImg.width, height - groundImg.height - cannonBaseImg.height);
 		this.balls = [];
 		this.word = new Word(this.settings.difficulty);
@@ -497,27 +539,7 @@ class Game
 
 	screenShake(intensity)
 	{
+		// Set the screen shake intensity
 		this.screenShakeIntensity = intensity;
 	}
-}
-
-function createToggle(label, checked, container)
-{
-	let wrapper = createDiv();
-	wrapper.addClass("toggle");
-
-	let checkbox = createCheckbox("", checked);
-
-	let slider = createDiv();
-	slider.addClass("slider");
-
-	let text = createSpan(label);
-
-	checkbox.parent(wrapper);
-	slider.parent(wrapper);
-	text.parent(wrapper);
-
-	wrapper.parent(container);
-
-	return checkbox;
 }

@@ -1,3 +1,4 @@
+// Global variables for assets
 let backgroundImg, ballImg, cannonHeadImg, cannonBaseImg, crateImg, groundImg, healthPowerupImg, speedPowerupImg, scorePowerupImg, invincibilityPowerupImg
 let questionButtonImg;
 let musicSound, cannonFireSound, crateFloorBreakSound, crateBallBreakSound, powerupHitSound;
