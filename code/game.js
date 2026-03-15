@@ -214,6 +214,7 @@ class Game
 		if (this.titleScreen && !this.instructionsScreen)
 		{
 			// Update title screen
+			this.instructionsButton.show();
 			this.instructionsButton.update();
 
 			// Show title screen UI

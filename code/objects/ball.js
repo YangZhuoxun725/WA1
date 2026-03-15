@@ -89,6 +89,9 @@ class Ball
             {
                 // Kill the ball if its too slow
                 this.kill();
+
+                // Create particle effect on ball death
+                this.particleEffect();
             }
         }
     }
@@ -157,9 +160,6 @@ class Ball
         {
             game.balls.splice(index, 1);
         }
-
-        // Create particle effect on ball death
-        this.particleEffect();
     }
 
     particleEffect()
