@@ -7,7 +7,7 @@ class Settings
         this.showHealthBar = true;
         this.showScore = true;
         this.showPowerupEffects = true;
-        this.arrowKeysControl = false;
+        this.arrowKeysControl = true;
         this.musicVolume = 1;
         this.sfxVolume = 1;
     }
